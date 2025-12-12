@@ -1,2 +1,1 @@
-# dictionary-platform
-dictionary-platform
+
