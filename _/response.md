@@ -53,7 +53,7 @@ definition_response
 }
 ```
 
-reference_active_item_response
+reference_item_active_response
 
 ```json
 {
