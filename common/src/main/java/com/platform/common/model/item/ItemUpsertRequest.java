@@ -1,7 +1,7 @@
-package com.platform.common.model.definition;
+package com.platform.common.model.item;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.platform.common.model.common.TranslationDto;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,9 +14,13 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DefinitionCreateRequest {
-    private String code;
-    private Map<String, Object> schema;
+public class ItemUpsertRequest {
+
+    @JsonProperty("ref_key")
+    private String refKey;
+
+    @JsonProperty("common_content")
+    private Map<String, Object> commonContent;
 
     private List<TranslationDto> translations;
 }

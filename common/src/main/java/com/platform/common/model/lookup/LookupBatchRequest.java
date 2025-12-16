@@ -1,26 +1,24 @@
-package com.platform.common.model.search;
+package com.platform.common.model.lookup;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.List;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 @Data
-public class BatchReferenceRequest {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class LookupBatchRequest {
     private List<SingleRequest> requests;
 
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class SingleRequest {
-        private String dictionaryCode;
+        private String code;
         private List<String> keys;
     }
 }

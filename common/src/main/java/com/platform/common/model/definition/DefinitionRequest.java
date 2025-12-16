@@ -14,9 +14,8 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DefinitionCreateRequest {
+public class DefinitionRequest {
     private String code;
     private Map<String, Object> schema;
-
     private List<TranslationDto> translations;
 }

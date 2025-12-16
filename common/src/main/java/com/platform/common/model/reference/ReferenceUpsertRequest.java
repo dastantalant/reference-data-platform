@@ -1,10 +1,14 @@
 package com.platform.common.model.reference;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.platform.common.model.common.TranslationDto;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -12,6 +16,14 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReferenceUpsertRequest {
+
     private String code;
-    private Map<String, String> content;
+
+    @JsonProperty("ref_key")
+    private String refKey;
+
+    @JsonProperty("common_content")
+    private Map<String, Object> commonContent;
+
+    private List<TranslationDto> translations;
 }
