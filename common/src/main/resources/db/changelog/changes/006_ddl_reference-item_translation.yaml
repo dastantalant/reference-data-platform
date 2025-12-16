@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: 006_ddl_reference-item_translation
+      author: system
+      changes:
+        - createTable:
+            tableName: reference_item_translate
+            columns:
+              - column:
+                  name: item_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: locale
+                  type: varchar(2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: value
+                  type: varchar(1000)
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: reference_item_translate
+            baseColumnNames: item_id
+            referencedTableName: reference_item
+            referencedColumnNames: id
+            constraintName: fk_ref_item_translate_item
+            onDelete: CASCADE
+        - addUniqueConstraint:
+            tableName: reference_item_translate
+            columnNames: item_id, locale
+            constraintName: uq_ref_item_translate_lang
+        - createIndex:
+            tableName: reference_item_translate
+            indexName: idx_ref_item_translate_search
+            columns:
+              - column:
+                  name: locale
+
