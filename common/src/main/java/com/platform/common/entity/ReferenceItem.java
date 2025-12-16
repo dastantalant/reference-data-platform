@@ -1,8 +1,12 @@
 package com.platform.common.entity;
 
 import com.platform.common.entity.base.BaseIdentityEntity;
+import com.platform.common.entity.base.Translate;
 import com.platform.common.enums.Status;
+
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -14,6 +18,7 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +26,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "reference_item", uniqueConstraints = @UniqueConstraint(name = "uq_reference_ref_key", columnNames = {"code", "version", "ref_key"}),
@@ -54,4 +62,9 @@ public class ReferenceItem extends BaseIdentityEntity {
     @JoinColumns({@JoinColumn(name = "code", referencedColumnName = "code", insertable = false, updatable = false),
             @JoinColumn(name = "version", referencedColumnName = "version", insertable = false, updatable = false)})
     private Definition definition;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "reference_item_translate", joinColumns = @JoinColumn(name = "item_id"))
+    @Builder.Default
+    private List<Translate> translates = new ArrayList<>();
 }
