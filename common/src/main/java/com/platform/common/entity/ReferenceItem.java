@@ -1,6 +1,6 @@
 package com.platform.common.entity;
 
-import com.platform.common.entity.base.BaseEntity;
+import com.platform.common.entity.base.BaseIdentityEntity;
 import com.platform.common.enums.Status;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,7 +30,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @SuperBuilder
-public class ReferenceItem extends BaseEntity<Long> {
+public class ReferenceItem extends BaseIdentityEntity {
 
     @Column(name = "code", nullable = false, length = 100)
     private String code;

@@ -1,8 +1,8 @@
-package com.platform.common.model.reference.response;
+package com.platform.common.model.definition;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.platform.common.enums.Status;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.platform.common.model.base.AbstractBaseDto;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,10 +16,10 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @SuperBuilder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ReferenceItemActiveResponse extends ReferenceItemResponse {
+public class BaseDefinition extends AbstractBaseDto {
 
-    @JsonIgnore
-    public Status getStatus() {
-        return super.getStatus();
-    }
+    private String code;
+
+    @JsonProperty("is_current")
+    private boolean isCurrent;
 }

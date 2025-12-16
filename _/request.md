@@ -11,3 +11,19 @@ reference_item_request
   
 }
 ```
+
+request
+```json
+[
+  {
+    "code": "COUNTRY"
+  },
+  {
+    "code": "CURRENCY",
+    "keys": [
+      "USD",
+      "EUR"
+    ]
+  }
+]
+```

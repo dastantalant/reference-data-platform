@@ -1,10 +1,10 @@
 package com.platform.common.service;
 
-import com.platform.common.model.definition.request.DefinitionRequest;
-import com.platform.common.model.definition.response.DefinitionPage;
-import com.platform.common.model.definition.response.DefinitionResponse;
-import com.platform.common.model.reference.response.ReferenceItemActiveResponse;
-import com.platform.common.model.reference.response.ReferenceItemResponse;
+import com.platform.common.model.definition.DefinitionCreateRequest;
+import com.platform.common.model.definition.PagedDefinitionResponse;
+import com.platform.common.model.definition.DefinitionResponse;
+import com.platform.common.model.reference.ReferenceItemActiveResponse;
+import com.platform.common.model.reference.ReferenceItemResponse;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Map;
@@ -13,11 +13,11 @@ public interface DefinitionService {
 
     DefinitionResponse create(String code);
 
-    DefinitionPage<ReferenceItemResponse> findAll(Pageable pageable);
+    PagedDefinitionResponse<ReferenceItemResponse> findAll(Pageable pageable);
 
-    DefinitionPage<ReferenceItemActiveResponse> findAllByStatusEqualActive(Pageable pageable);
+    PagedDefinitionResponse<ReferenceItemActiveResponse> findAllByStatusEqualActive(Pageable pageable);
 
-    DefinitionResponse update(DefinitionRequest request);
+    DefinitionResponse update(DefinitionCreateRequest request);
 
     boolean validate(Map<String, Object> schema);
 

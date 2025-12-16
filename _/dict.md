@@ -714,7 +714,20 @@
 ```
 
 ```json
-{"code":"{code}","version":1,"is_active":true,"updated_at":"ISO 8601","data":[{"key":"{key}","version":1,"is_active":true,"updated_at":"2025-12-28T10:00:00Z"}]}
+{
+  "code": "{code}",
+  "version": 1,
+  "is_active": true,
+  "updated_at": "ISO 8601",
+  "data": [
+    {
+      "key": "{key}",
+      "version": 1,
+      "is_active": true,
+      "updated_at": "2025-12-28T10:00:00Z"
+    }
+  ]
+}
 ```
 
 

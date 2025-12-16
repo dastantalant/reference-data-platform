@@ -17,7 +17,7 @@ import java.time.Instant;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @SuperBuilder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public abstract class BaseAuditResponse extends BaseResponse {
+public abstract class AuditableDto extends AbstractBaseDto {
     @JsonProperty("created_by")
     private String createdBy;
 
