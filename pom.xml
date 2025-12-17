@@ -25,12 +25,18 @@
         <project.version>0.0.1</project.version>
         <java.version>25</java.version>
 
+        <hypersistence.version>3.14.0</hypersistence.version> <!-- Dec 16, 2025 -->
         <json.validator.version>2.0.0</json.validator.version> <!-- Oct 25, 2025 -->
         <jupiter.version>6.0.1</jupiter.version> <!-- Oct 31, 2025 -->
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>io.hypersistence</groupId>
+                <artifactId>hypersistence-utils-hibernate-71</artifactId>
+                <version>${hypersistence.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.networknt</groupId>
                 <artifactId>json-schema-validator</artifactId>
