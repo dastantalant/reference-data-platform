@@ -1,4 +1,13 @@
 databaseChangeLog:
+  - property:
+      name: json_type
+      value: clob
+      dbms: "!postgresql"
+  - property:
+      name: json_type
+      value: jsonb
+      dbms: postgresql
+
   - changeSet:
       id: 002_ddl_definition
       author: system
@@ -30,12 +39,12 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: schema_lob
-                  type: clob
+                  type: ${json_type}
                   constraints:
                     nullable: false
               - column:
                   name: validation_rules_lob
-                  type: clob
+                  type: ${json_type}
               - column:
                   name: created_by
                   type: varchar(255)

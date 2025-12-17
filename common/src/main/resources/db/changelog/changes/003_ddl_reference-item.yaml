@@ -1,4 +1,13 @@
 databaseChangeLog:
+  - property:
+      name: json_type
+      value: clob
+      dbms: "!postgresql"
+  - property:
+      name: json_type
+      value: jsonb
+      dbms: postgresql
+
   - changeSet:
       id: 003_ddl_reference-item
       author: system
@@ -36,7 +45,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: content_lob
-                  type: clob
+                  type: ${json_type}
                   constraints:
                     nullable: false
               - column:
@@ -113,21 +122,18 @@ databaseChangeLog:
 
         - createIndex:
             tableName: reference_item
-            indexName: idx_ref_item_validity
+            indexName: idx_ref_lookup_active
             columns:
-              - column:
-                  name: status
-              - column:
-                  name: valid_from
-              - column:
-                  name: valid_to
+              - column: { name: code }
+              - column: { name: status }
+              - column: { name: valid_from }
+              - column: { name: valid_to }
 
         - createIndex:
             tableName: reference_item
             indexName: idx_ref_item_tree
             columns:
-              - column:
-                  name: tree_path
+              - column: { name: tree_path }
         - sql:
             sql: >
               ALTER TABLE reference_item ADD CONSTRAINT chk_ref_status 

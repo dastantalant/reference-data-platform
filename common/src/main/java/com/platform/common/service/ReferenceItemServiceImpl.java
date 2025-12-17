@@ -11,13 +11,15 @@ import com.platform.common.model.reference.ReferenceUpsertRequest;
 import com.platform.common.repository.ReferenceItemRepository;
 import com.platform.common.util.JsonHelper;
 
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 
+import jakarta.transaction.Transactional;
+
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
@@ -108,6 +110,50 @@ public class ReferenceItemServiceImpl implements ReferenceItemService {
         } else {
             // Если ключ не передан, сбрасываем родителя (актуально для update)
             item.setParent(null);
+        }
+    }
+
+    @Transactional
+    public void moveNode(String code, String itemKey, String newParentKey) {
+        ReferenceItem item = repository.findByCodeAndKey(code, itemKey).orElseThrow();
+        ReferenceItem newParent = repository.findByCodeAndKey(code, newParentKey).orElseThrow();
+
+        String oldPath = item.getTreePath(); // Например: /1/10/50/
+
+        // 1. Вычисляем новый путь для узла
+        // Логика: Путь родителя + ID узла + /
+        String newPath = newParent.getTreePath() + item.getId() + "/";
+
+        // 2. Обновляем сам узел
+        item.setParent(newParent);
+        item.setTreePath(newPath);
+        repository.save(item);
+
+        // 3. Обновляем ВСЕХ потомков
+        // Ищем всех, у кого путь начинался со старого пути
+        List<ReferenceItem> descendants = repository.findByTreePathStartingWith(oldPath);
+
+        for (ReferenceItem child : descendants) {
+            // Заменяем префикс пути
+            // Было: /1/10/50/99 -> Стало: /1/20/50/99
+            String childSuffix = child.getTreePath().substring(oldPath.length());
+            child.setTreePath(newPath + childSuffix);
+        }
+
+        repository.saveAll(descendants);
+    }
+
+    private void validateOverlaps(ReferenceItem item) {
+        // Если to == null, считаем это "бесконечностью" (Instant.MAX)
+        Instant to = item.getValidTo() == null ? Instant.MAX : item.getValidTo();
+        Instant from = item.getValidFrom() == null ? Instant.MIN : item.getValidFrom();
+
+        Long currentId = item.getId() == null ? -1L : item.getId();
+
+        boolean hasOverlap = repository.existsOverlap(item.getCode(), item.getKey(), from, to, currentId);
+
+        if (hasOverlap) {
+            throw new ValidationException("Найдено пересечение дат с существующей записью");
         }
     }
 }
