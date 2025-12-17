@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
@@ -23,4 +24,8 @@ public class ItemUpsertRequest {
     private Map<String, Object> commonContent;
 
     private List<TranslationDto> translations;
+
+    private String parentKey;
+    private Instant validFrom;
+    private Instant validTo;
 }

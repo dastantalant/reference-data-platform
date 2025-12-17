@@ -34,8 +34,11 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: validation_rules_lob
+                  type: clob
+              - column:
                   name: created_by
-                  type: bigint
+                  type: varchar(255)
                   constraints:
                     nullable: false
               - column:
@@ -45,7 +48,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: updated_by
-                  type: bigint
+                  type: varchar(255)
               - column:
                   name: updated_at
                   type: timestamp
@@ -53,7 +56,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: deleted_by
-                  type: bigint
+                  type: varchar(255)
               - column:
                   name: deleted_at
                   type: timestamp
@@ -63,26 +66,14 @@ databaseChangeLog:
             columnNames: code, version
             constraintName: pk_definition
 
-        - addForeignKeyConstraint:
-            baseTableName: definition
-            baseColumnNames: created_by
-            referencedTableName: users
-            referencedColumnNames: id
-            constraintName: fk_def_created_by
-
-        - addForeignKeyConstraint:
-            baseTableName: definition
-            baseColumnNames: updated_by
-            referencedTableName: users
-            referencedColumnNames: id
-            constraintName: fk_def_updated_by
-
-        - addForeignKeyConstraint:
-            baseTableName: definition
-            baseColumnNames: deleted_by
-            referencedTableName: users
-            referencedColumnNames: id
-            constraintName: fk_def_deleted_by
+        - createIndex:
+            tableName: definition
+            indexName: idx_def_status_current
+            columns:
+              - column:
+                  name: is_current
+              - column:
+                  name: status
 
         - sql:
             sql: >

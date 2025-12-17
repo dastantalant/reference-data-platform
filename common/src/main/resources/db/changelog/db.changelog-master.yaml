@@ -6,8 +6,6 @@ databaseChangeLog:
   - include:
       file: db/changelog/changes/003_ddl_reference-item.yaml
   - include:
-      file: db/changelog/changes/004_create_indexes.yaml
+      file: db/changelog/changes/004_ddl_definition_translation.yaml
   - include:
-      file: db/changelog/changes/005_ddl_definition_translation.yaml
-  - include:
-      file: db/changelog/changes/006_ddl_reference-item_translation.yaml
+      file: db/changelog/changes/005_ddl_reference-item_translation.yaml

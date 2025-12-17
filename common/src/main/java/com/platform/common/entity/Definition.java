@@ -1,7 +1,7 @@
 package com.platform.common.entity;
 
 import com.platform.common.entity.base.BaseAudit;
-import com.platform.common.entity.base.Translate;
+import com.platform.common.entity.base.Translation;
 import com.platform.common.enums.Status;
 
 import jakarta.persistence.CollectionTable;
@@ -54,11 +54,15 @@ public class Definition extends BaseAudit {
     private String schemaLob;
 
     @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "definition_translate",
+    @CollectionTable(name = "definition_translation",
             joinColumns = {@JoinColumn(name = "definition_code", referencedColumnName = "code"),
                     @JoinColumn(name = "definition_version", referencedColumnName = "version")})
     @Builder.Default
-    private List<Translate> translates = new ArrayList<>();
+    private List<Translation> translations = new ArrayList<>();
+
+    @Lob
+    @Column(name = "validation_rules_lob")
+    private String validationRulesLob;
 
     @Embeddable
     public record Id(

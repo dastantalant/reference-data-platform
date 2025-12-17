@@ -42,7 +42,7 @@ public class ProjectDumpUtil {
         try {
             ProjectDumpUtil.builder()
                     .root(Paths.get("."))
-                    .targetPackage("com.platform.common.model")
+                    .targetPackage("com.platform.common.entity")
                     .output(Paths.get("project.md"))
                     .build()
                     .dump();

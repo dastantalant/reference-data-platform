@@ -1,7 +1,7 @@
 package com.platform.common.entity;
 
 import com.platform.common.entity.base.BaseIdentityEntity;
-import com.platform.common.entity.base.Translate;
+import com.platform.common.entity.base.Translation;
 import com.platform.common.enums.Status;
 
 import jakarta.persistence.CollectionTable;
@@ -33,7 +33,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "reference_item", uniqueConstraints = @UniqueConstraint(name = "uq_reference_ref_key", columnNames = {"code", "version", "ref_key"}),
-        indexes = @Index(name = "idx_reference_lookup", columnList = "code, ref_key"))
+        indexes = {@Index(name = "idx_reference_lookup", columnList = "code, ref_key"),
+                @Index(name = "idx_ref_status", columnList = "status")})
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -65,9 +66,9 @@ public class ReferenceItem extends BaseIdentityEntity {
     private Definition definition;
 
     @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "reference_item_translate", joinColumns = @JoinColumn(name = "item_id"))
+    @CollectionTable(name = "reference_item_translation", joinColumns = @JoinColumn(name = "item_id"))
     @Builder.Default
-    private List<Translate> translates = new ArrayList<>();
+    private List<Translation> translations = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
@@ -78,6 +79,9 @@ public class ReferenceItem extends BaseIdentityEntity {
 
     @Column(name = "valid_to")
     private Instant validTo;
+
+    @Column(name = "tree_path", length = 1000)
+    private String treePath;
 
     public boolean isValidOn(Instant date) {
         if (date == null) date = Instant.now();

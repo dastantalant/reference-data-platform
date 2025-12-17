@@ -3,6 +3,7 @@ databaseChangeLog:
       id: 003_ddl_reference-item
       author: system
       changes:
+        # 1. Основная таблица ReferenceItem
         - createTable:
             tableName: reference_item
             columns:
@@ -42,6 +43,9 @@ databaseChangeLog:
                   name: parent_id
                   type: bigint
               - column:
+                  name: tree_path
+                  type: varchar(1000)
+              - column:
                   name: valid_from
                   type: timestamp
               - column:
@@ -49,7 +53,7 @@ databaseChangeLog:
                   type: timestamp
               - column:
                   name: created_by
-                  type: bigint
+                  type: varchar(255)
                   constraints:
                     nullable: false
               - column:
@@ -59,7 +63,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: updated_by
-                  type: bigint
+                  type: varchar(255)
               - column:
                   name: updated_at
                   type: timestamp
@@ -67,7 +71,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: deleted_by
-                  type: bigint
+                  type: varchar(255)
               - column:
                   name: deleted_at
                   type: timestamp
@@ -86,32 +90,44 @@ databaseChangeLog:
 
         - addForeignKeyConstraint:
             baseTableName: reference_item
-            baseColumnNames: created_by
-            referencedTableName: users
-            referencedColumnNames: id
-            constraintName: fk_ref_created_by
-
-        - addForeignKeyConstraint:
-            baseTableName: reference_item
-            baseColumnNames: updated_by
-            referencedTableName: users
-            referencedColumnNames: id
-            constraintName: fk_ref_updated_by
-
-        - addForeignKeyConstraint:
-            baseTableName: reference_item
-            baseColumnNames: deleted_by
-            referencedTableName: users
-            referencedColumnNames: id
-            constraintName: fk_ref_deleted_by
-
-        - addForeignKeyConstraint:
-            baseTableName: reference_item
             baseColumnNames: parent_id
             referencedTableName: reference_item
             referencedColumnNames: id
             constraintName: fk_ref_item_parent
 
+        - createIndex:
+            tableName: reference_item
+            indexName: idx_ref_item_key_lookup
+            columns:
+              - column:
+                  name: code
+              - column:
+                  name: ref_key
+
+        - createIndex:
+            tableName: reference_item
+            indexName: idx_ref_item_updated_at
+            columns:
+              - column:
+                  name: updated_at
+
+        - createIndex:
+            tableName: reference_item
+            indexName: idx_ref_item_validity
+            columns:
+              - column:
+                  name: status
+              - column:
+                  name: valid_from
+              - column:
+                  name: valid_to
+
+        - createIndex:
+            tableName: reference_item
+            indexName: idx_ref_item_tree
+            columns:
+              - column:
+                  name: tree_path
         - sql:
             sql: >
               ALTER TABLE reference_item ADD CONSTRAINT chk_ref_status 

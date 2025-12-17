@@ -1,6 +1,3 @@
-* Valid From/To (Если это требует бизнес-логика)
-* Cross-References (Чтобы данные были целостными)
-* Иерархии (Tree Structures)
 * Жизненный цикл и Согласование (Workflow)
 * SDK / Client Lib (Чтобы коллегам было удобно пользоваться)
 * Excel Import/Export (Чтобы наполнять данными не через Postman/Curl)

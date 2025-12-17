@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
@@ -45,4 +46,10 @@ public class ReferenceItemResponse extends AuditableDto {
 
     @JsonView(Views.Internal.class)
     private DefinitionResponse definition;
+
+    private String parentKey;
+    private Instant validFrom;
+    private Instant validTo;
+
+    private List<String> validationWarnings;
 }

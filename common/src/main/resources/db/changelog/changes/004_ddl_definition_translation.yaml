@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: 005_ddl_definition_translation
+      id: 004_ddl_definition_translation
       author: system
       changes:
         - createTable:
-            tableName: definition_translate
+            tableName: definition_translation
             columns:
               - column:
                   name: definition_code
@@ -23,23 +23,21 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: value
-                  type: varchar(1000)
+                  type: varchar(2000)
                   constraints:
                     nullable: false
+
         - addForeignKeyConstraint:
-            baseTableName: definition_translate
+            baseTableName: definition_translation
             baseColumnNames: definition_code, definition_version
             referencedTableName: definition
             referencedColumnNames: code, version
-            constraintName: fk_locale_definition
+            constraintName: fk_def_trans_definition
             onDelete: CASCADE
-        - addUniqueConstraint:
-            tableName: definition_translate
-            columnNames: definition_code, definition_version, locale
-            constraintName: uq_def_translate_lang
+
         - createIndex:
-            tableName: definition_translate
-            indexName: idx_def_translate_search
+            tableName: definition_translation
+            indexName: idx_def_trans_locale
             columns:
               - column:
                   name: locale

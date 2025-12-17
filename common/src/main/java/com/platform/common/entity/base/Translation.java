@@ -13,12 +13,12 @@ import jakarta.persistence.Embeddable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Translate {
+public class Translation {
 
     @Column(name = "locale", nullable = false, length = 2)
     private String locale;
 
-    @Column(name = "value", nullable = false, length = 1000)
+    @Column(name = "value", nullable = false, length = 2000)
     private String value;
 
 }
