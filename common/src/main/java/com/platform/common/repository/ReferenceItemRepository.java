@@ -17,8 +17,7 @@ import java.util.Optional;
 
 public interface ReferenceItemRepository
         extends JpaRepository<ReferenceItem, Long>,
-        JpaSpecificationExecutor<ReferenceItem>,
-        ReferenceItemRepositoryCustom {
+        JpaSpecificationExecutor<ReferenceItem>{
 
 
     /**
