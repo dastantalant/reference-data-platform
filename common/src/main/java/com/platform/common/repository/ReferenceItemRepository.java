@@ -4,6 +4,8 @@ import com.platform.common.entity.ReferenceItem;
 import com.platform.common.enums.Status;
 import com.platform.common.model.projection.I18nProjection;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -18,11 +20,15 @@ public interface ReferenceItemRepository
         JpaSpecificationExecutor<ReferenceItem>,
         ReferenceItemRepositoryCustom {
 
+
     /**
      * Используется для проверки существования записи (Cross-Reference Validation).
      * Важно проверять статус, чтобы не ссылаться на удаленные (ARCHIVED) или черновики (DRAFT).
      */
-    boolean existsByCodeAndKeyAndStatus(String code, String key, Status status);
+    // Для проверки Cross-Ref
+    @Query("SELECT COUNT(r) > 0 FROM ReferenceItem r WHERE r.code = :code AND r.key = :key AND r.status = :status")
+    boolean existsByCodeAndKeyAndStatus(@Param("code") String code, @Param("key") String key, @Param("status") Status status);
+    // boolean existsByCodeAndKeyAndStatus(String code, String key, Status status);
 
     /**
      * Поиск родителя или конкретной записи для админки.
@@ -86,5 +92,14 @@ public interface ReferenceItemRepository
      * Очень эффективно использует обычный B-Tree индекс.
      */
     List<ReferenceItem> findByTreePathStartingWith(String pathPrefix);
+
+    // 1. Поиск всех записей по коду справочника (для админки с пагинацией)
+    // Это Derived Query метод, Spring Data сам сгенерирует SQL
+    List<ReferenceItem> findAllByCode(String code);
+
+    Page<ReferenceItem> findAllByCode(String code, Pageable pageable);
+
+    // Дополнительный метод: если нужно фильтровать еще и по статусу в списке
+    Page<ReferenceItem> findAllByCodeAndStatus(String code, Status status, Pageable pageable);
 
 }

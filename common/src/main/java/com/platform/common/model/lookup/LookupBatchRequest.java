@@ -15,6 +15,7 @@ public class LookupBatchRequest {
     private List<SingleRequest> requests;
 
     @Data
+    @Builder
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SingleRequest {
