@@ -19,8 +19,8 @@ public class CacheConfig {
     public CacheManager cacheManager() {
         CaffeineCacheManager manager = new CaffeineCacheManager("dictionaries");
         manager.setCaffeine(Caffeine.newBuilder()
-                .expireAfterWrite(10, TimeUnit.HOURS) // Кэш живет 10 час
-                .maximumSize(5000)); // Максимум 5000 справочников в памяти
+                .expireAfterWrite(24, TimeUnit.HOURS)
+                .maximumSize(5000));
         return manager;
     }
 }

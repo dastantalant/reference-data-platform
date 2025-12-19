@@ -211,3 +211,241 @@
 | **PagedDefinitionResponse** | `.definition` | Обертка для пагинации. |
 | **ReferenceItemResponse** | `.item` | Полная карточка записи (для админки). |
 | **ItemUpsertRequest** | `.item` | Создание/Обновление записи. |
+
+
+
+
+Вот подробное описание форматов данных (**Request Body** и **Response Body**) для каждого из указанных вами роутов.
+
+Они базируются на ранее утвержденных DTO: `DefinitionResponse`, `DefinitionCreateRequest`, `ItemUpsertRequest` и `ReferenceItemResponse`.
+
+---
+
+## 1. Admin API: Definitions (Схемы)
+
+### 1.1 Получить историю версий
+**GET** `/api/v1/admin/definitions/{code}/versions`
+
+*   **Request:** `(пустое тело)`
+*   **Response:** `List<DefinitionResponse>`
+    Возвращает список всех версий (v1, v2...) отсортированный по убыванию версии.
+
+```json
+[
+  {
+    "code": "COUNTRY",
+    "version": 2,
+    "status": "DRAFT",
+    "is_current": false,
+    "schema": { "type": "object", "properties": { "iso": { "type": "number" }, "population": { "type": "number" } } },
+    "translations": [ { "locale": "ru", "value": "Страны" } ],
+    "created_at": "2025-12-20T10:00:00Z",
+    "created_by": "admin"
+  },
+  {
+    "code": "COUNTRY",
+    "version": 1,
+    "status": "ACTIVE",
+    "is_current": true,
+    "schema": { "type": "object", "properties": { "iso": { "type": "number" } } },
+    "translations": [ { "locale": "ru", "value": "Страны" } ],
+    "created_at": "2025-01-01T10:00:00Z",
+    "created_by": "system"
+  }
+]
+```
+
+### 1.2 Создать новую версию (Черновик)
+**POST** `/api/v1/admin/definitions/{code}/versions`
+
+*   **Request:** `DefinitionCreateRequest`
+    *   Поле `code` в теле игнорируется (берется из URL), или должно совпадать.
+    *   Передаем новую структуру `schema` и правила.
+
+```json
+{
+  "schema": {
+    "type": "object",
+    "properties": {
+      "iso": { "type": "number" },
+      "new_field": { "type": "string" } 
+    },
+    "required": ["iso"]
+  },
+  "translations": [ 
+    { "locale": "ru", "value": "Страны (v2)" }
+  ],
+  "validation_rules": [
+    { "field": "currency_code", "targetDictionary": "CURRENCY" }
+  ]
+}
+```
+
+*   **Response:** `DefinitionResponse` (Созданная версия)
+
+```json
+{
+  "code": "COUNTRY",
+  "version": 2,  // Авто-инкремент
+  "status": "DRAFT",
+  "is_current": false,
+  "schema": { ... },
+  "created_at": "2025-12-20T12:00:00Z"
+  // ... остальные поля
+}
+```
+
+### 1.3 Опубликовать версию
+**PATCH** `/api/v1/admin/definitions/{code}/versions/{version}/publish`
+
+*   **Request:** `(пустое тело)`
+*   **Response:** `DefinitionResponse` (Обновленная)
+    *   Старая версия становится `ARCHIVED` (или просто `is_current: false`).
+    *   Эта версия становится `ACTIVE` и `is_current: true`.
+
+```json
+{
+  "code": "COUNTRY",
+  "version": 2,
+  "status": "ACTIVE",
+  "is_current": true,
+  // ...
+}
+```
+
+---
+
+## 2. Admin API: Items (Данные)
+
+### 2.1 Создать / Обновить запись (Upsert)
+**PUT** `/api/v1/admin/definitions/{code}/items/{key}`
+
+*   **Request:** `ItemUpsertRequest`
+    *   `ref_key` в теле должен совпадать с `{key}` в URL (или быть опущен).
+
+```json
+{
+  "parent_key": "NORTH_AMERICA",  // Опционально (Иерархия)
+  "valid_from": "2025-01-01T00:00:00Z", // Опционально (Темпоральность)
+  "valid_to": null,
+  
+  "common_content": {
+    "iso_numeric": 840,
+    "currency_code": "USD"
+  },
+  
+  "translations": [
+    { "locale": "ru", "value": "США" },
+    { "locale": "en", "value": "USA" }
+  ]
+}
+```
+
+*   **Response:** `ReferenceItemResponse`
+
+```json
+{
+  "code": "COUNTRY",
+  "ref_key": "USA",
+  "status": "DRAFT", // При создании обычно DRAFT, если нет авто-публикации
+  "parent_key": "NORTH_AMERICA",
+  "valid_from": "2025-01-01T00:00:00Z",
+  "common_content": { "iso_numeric": 840, "currency_code": "USD" },
+  "translations": [
+    { "locale": "ru", "value": "США" },
+    { "locale": "en", "value": "USA" }
+  ],
+  "created_by": "user_1",
+  "updated_at": "2025-12-20T12:05:00Z"
+}
+```
+
+### 2.2 Пакетная вставка
+**POST** `/api/v1/admin/definitions/{code}/items/batch`
+
+*   **Request:** `List<ItemUpsertRequest>`
+
+```json
+[
+  {
+    "ref_key": "USA",
+    "common_content": { "iso": 840 },
+    "translations": [{ "locale": "en", "value": "USA" }]
+  },
+  {
+    "ref_key": "CAN",
+    "common_content": { "iso": 124 },
+    "translations": [{ "locale": "en", "value": "Canada" }]
+  }
+]
+```
+
+*   **Response:** `BatchResponse` (Рекомендуется обертка, чтобы показать ошибки)
+
+```json
+{
+  "processed_count": 2,
+  "failed_count": 0,
+  "items": [
+    { "ref_key": "USA", "status": "CREATED" }, // Или полные объекты ReferenceItemResponse
+    { "ref_key": "CAN", "status": "UPDATED" }
+  ]
+}
+```
+
+### 2.3 Удалить (Архивировать)
+**DELETE** `/api/v1/admin/definitions/{code}/items/{key}`
+
+*   **Request:** `(пустое тело)`
+*   **Response:** `(пустое тело)` — **Status 204 No Content**
+
+### 2.4 Утвердить (Approve)
+**POST** `/api/v1/admin/definitions/{code}/items/{key}/approve`
+
+*   **Request:** `(пустое тело)`
+*   **Response:** `ReferenceItemResponse`
+    *   Поле `status` меняется на `ACTIVE`.
+
+```json
+{
+  "ref_key": "USA",
+  "status": "ACTIVE",
+  // ... остальные поля
+}
+```
+
+---
+
+## 3. System API
+
+### 3.1 Запуск валидации
+**POST** `/api/v1/admin/system/validate/{code}`
+
+*   **Request:** `(пустое тело)` или опциональные настройки
+
+```json
+// Опционально
+{
+  "full_scan": true  // Перепроверить даже то, что не менялось
+}
+```
+
+*   **Response:** `ValidationReportResponse`
+    Если валидация быстрая (синхронная):
+
+```json
+{
+  "dictionary_code": "COUNTRY",
+  "total_items": 250,
+  "valid_items": 249,
+  "invalid_items": 1,
+  "errors": [
+    {
+      "ref_key": "ATLANTIS",
+      "message": "Validation error: required field 'iso' is missing"
+    }
+  ]
+}
+```
+
+*Если валидация асинхронная (рекомендуется для больших объемов), возвращается `202 Accepted` и `jobId`.*

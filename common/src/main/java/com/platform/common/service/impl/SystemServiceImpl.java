@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -30,12 +31,12 @@ public class SystemServiceImpl implements SystemService {
     private final ReferenceItemRepository itemRepository;
     private final DefinitionRepository definitionRepository;
     private final JsonValidationService jsonValidationService;
-    private final ObjectMapper objectMapper; // Добавили маппер
+    private final ObjectMapper objectMapper;
 
     @Override
     public void evictCache(String code) {
         if (cacheManager.getCache("dictionaries") != null) {
-            cacheManager.getCache("dictionaries").clear();
+            Objects.requireNonNull(cacheManager.getCache("dictionaries")).clear();
         }
     }
 
@@ -97,7 +98,7 @@ public class SystemServiceImpl implements SystemService {
     }
 
     @Override
-    public byte[] export(String code, String format) {
-        return new byte[0]; // Stub
+    public byte[] export(String code) {
+        return new byte[0];
     }
 }
