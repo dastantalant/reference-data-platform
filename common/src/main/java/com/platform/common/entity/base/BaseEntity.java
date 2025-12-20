@@ -1,11 +1,9 @@
 package com.platform.common.entity.base;
 
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.PostLoad;
-import jakarta.persistence.PostPersist;
-import jakarta.persistence.PostUpdate;
-import jakarta.persistence.Transient;
+import org.hibernate.proxy.HibernateProxy;
+
+import org.springframework.data.domain.Persistable;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,8 +11,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.proxy.HibernateProxy;
-import org.springframework.data.domain.Persistable;
+
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.PostLoad;
+import jakarta.persistence.PostPersist;
+import jakarta.persistence.PostUpdate;
+import jakarta.persistence.Transient;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -62,11 +65,11 @@ public abstract class BaseEntity<PK extends Serializable>
         if (this == o) return true;
         if (o == null) return false;
         Class<?> oEffectiveClass = o instanceof HibernateProxy a
-                        ? a.getHibernateLazyInitializer().getPersistentClass()
-                        : o.getClass();
+                ? a.getHibernateLazyInitializer().getPersistentClass()
+                : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy a
-                        ? a.getHibernateLazyInitializer().getPersistentClass()
-                        : this.getClass();
+                ? a.getHibernateLazyInitializer().getPersistentClass()
+                : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
         return getId() != null && Objects.equals(getId(), ((BaseEntity<?>) o).getId());
     }

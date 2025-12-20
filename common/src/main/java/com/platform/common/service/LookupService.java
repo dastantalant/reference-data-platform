@@ -8,6 +8,7 @@ import java.time.Instant;
 import java.util.List;
 
 public interface LookupService {
+
     DictionaryLookupResponse getDictionary(String code, String lang, Instant date);
 
     ItemLookupResponse getItem(String code, String key, Instant date);

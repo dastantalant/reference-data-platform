@@ -3,6 +3,7 @@ package com.platform.common.config;
 import com.platform.common.entity.User;
 import com.platform.common.repository.UserRepository;
 import org.jspecify.annotations.NullMarked;
+
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;

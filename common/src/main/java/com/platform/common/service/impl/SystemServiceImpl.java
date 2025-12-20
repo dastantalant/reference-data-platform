@@ -10,11 +10,13 @@ import com.platform.common.repository.DefinitionRepository;
 import com.platform.common.repository.ReferenceItemRepository;
 import com.platform.common.service.JsonValidationService;
 import com.platform.common.service.SystemService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,36 +45,28 @@ public class SystemServiceImpl implements SystemService {
     @Override
     @Transactional(readOnly = true)
     public ValidationReportResponse validateDictionary(String code) {
-        // 1. Получаем схему текущей версии справочника
         String schemaLob = definitionRepository.findCurrentByCode(code)
                 .map(Definition::getSchemaLob)
                 .orElse(null);
 
-        // Если схемы нет, то валидировать нечего (или считаем всё валидным)
         if (schemaLob == null) {
             return ValidationReportResponse.builder()
                     .code(code)
-                    .totalItems(0) // Или реальное кол-во
+                    .totalItems(0)
                     .build();
         }
 
-        // 2. Загружаем все элементы
         List<ReferenceItem> items = itemRepository.findAllByCode(code);
         List<ValidationReportResponse.ValidationErrorItem> errors = new ArrayList<>();
 
         for (ReferenceItem item : items) {
             try {
-                // 3. Парсим JSON контент из базы
                 Map<String, Object> contentMap = parseContent(item.getContentLob());
-
-                // 4. Валидируем
                 jsonValidationService.validate(contentMap, schemaLob);
-
             } catch (Exception e) {
-                // 5. Собираем ошибки
                 errors.add(ValidationReportResponse.ValidationErrorItem.builder()
                         .refKey(item.getKey())
-                        .message(e.getMessage()) // Сообщение из ValidationService
+                        .message(e.getMessage())
                         .build());
             }
         }
@@ -91,7 +85,8 @@ public class SystemServiceImpl implements SystemService {
             return Collections.emptyMap();
         }
         try {
-            return objectMapper.readValue(json, new TypeReference<>() {});
+            return objectMapper.readValue(json, new TypeReference<>() {
+            });
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Corrupted JSON data in DB: " + e.getMessage());
         }

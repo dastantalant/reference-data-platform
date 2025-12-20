@@ -34,12 +34,9 @@ public class SystemController {
 
     @GetMapping("/export/{code}")
     public ResponseEntity<byte[]> export(@PathVariable String code) {
-
-        byte[] content = systemService.export(code);
-
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + code + ".xlsx\"")
                 .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
-                .body(content);
+                .body(systemService.export(code));
     }
 }

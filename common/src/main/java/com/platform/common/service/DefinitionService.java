@@ -1,15 +1,12 @@
 package com.platform.common.service;
 
 import com.platform.common.model.definition.DefinitionCreateRequest;
-import com.platform.common.model.definition.PagedDefinitionResponse;
 import com.platform.common.model.definition.DefinitionResponse;
-import com.platform.common.model.reference.ReferenceItemResponse;
-import com.platform.common.model.system.ValidationReportResponse;
+import com.platform.common.model.definition.PagedDefinitionResponse;
 
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-import java.util.Map;
 
 public interface DefinitionService {
 

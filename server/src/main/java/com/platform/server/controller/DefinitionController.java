@@ -36,10 +36,8 @@ public class DefinitionController {
     private final DefinitionService definitionService;
     private final ReferenceItemService itemService;
 
-    // --- Definitions (Schemas) ---
-
     @GetMapping
-    @JsonView(Views.Summary.class) // Показываем краткую инфу
+    @JsonView(Views.Summary.class)
     public PagedDefinitionResponse<DefinitionResponse> page(
             @RequestParam(required = false) String search,
             Pageable pageable) {
@@ -76,10 +74,8 @@ public class DefinitionController {
         return definitionService.publishVersion(code, version);
     }
 
-    // --- Reference Items (Data) ---
-
     @GetMapping("/{code}/items")
-    @JsonView(Views.Summary.class) // В списке скрываем тяжелый контент, если нужно
+    @JsonView(Views.Summary.class)
     public PagedDefinitionResponse<ReferenceItemResponse> getItem(
             @PathVariable String code,
             @RequestParam(required = false) String q,
@@ -89,7 +85,7 @@ public class DefinitionController {
     }
 
     @GetMapping("/{code}/items/{key}")
-    @JsonView(Views.Internal.class) // Показываем всё (включая аудит и definitions)
+    @JsonView(Views.Internal.class)
     public ReferenceItemResponse getItem(@PathVariable String code, @PathVariable String key) {
         return itemService.findByKey(code, key);
     }

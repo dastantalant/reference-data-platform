@@ -9,8 +9,9 @@ import com.platform.common.model.common.TranslationDto;
 import com.platform.common.model.lookup.ItemLookupResponse;
 import com.platform.common.model.reference.ReferenceItemResponse;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import lombok.RequiredArgsConstructor;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,8 +23,6 @@ import java.util.stream.Collectors;
 public class ReferenceItemMapper {
 
     private final ObjectMapper objectMapper;
-
-    // --- Admin API Mapping ---
 
     public ReferenceItemResponse toResponse(ReferenceItem item) {
         return ReferenceItemResponse.builder()
@@ -42,8 +41,6 @@ public class ReferenceItemMapper {
                 .build();
     }
 
-    // --- Lookup API Mapping ---
-
     public ItemLookupResponse toLookupResponse(ReferenceItem item, String lang) {
         return ItemLookupResponse.builder()
                 .refKey(item.getKey())
@@ -51,8 +48,6 @@ public class ReferenceItemMapper {
                 .details(parseJson(item.getContentLob()))
                 .build();
     }
-
-    // --- Helpers ---
 
     public List<Translation> toEntityTranslations(List<TranslationDto> dtos) {
         if (dtos == null) return Collections.emptyList();
@@ -86,7 +81,8 @@ public class ReferenceItemMapper {
     private Map<String, Object> parseJson(String json) {
         if (json == null || json.isEmpty()) return Collections.emptyMap();
         try {
-            return objectMapper.readValue(json, new TypeReference<>() {});
+            return objectMapper.readValue(json, new TypeReference<>() {
+            });
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Error parsing JSON", e);
         }

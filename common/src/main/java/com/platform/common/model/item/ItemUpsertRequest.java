@@ -2,6 +2,7 @@ package com.platform.common.model.item;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.platform.common.model.common.TranslationDto;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

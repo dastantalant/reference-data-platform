@@ -4,6 +4,14 @@ import com.platform.common.entity.base.BaseIdentityEntity;
 import com.platform.common.entity.base.Translation;
 import com.platform.common.enums.Status;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -19,22 +27,14 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
-
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "reference_item", uniqueConstraints = @UniqueConstraint(name = "uq_reference_ref_key", columnNames = {"code", "version", "ref_key"}),
-        indexes = {@Index(name = "idx_reference_lookup", columnList = "code, ref_key"),
-                @Index(name = "idx_ref_status", columnList = "status")})
+@Table(name = "reference_item",
+        uniqueConstraints = @UniqueConstraint(name = "uq_reference_ref_key", columnNames = {"code", "version", "ref_key"}),
+        indexes = {@Index(name = "idx_reference_lookup", columnList = "code, ref_key"), @Index(name = "idx_ref_status", columnList = "status")})
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

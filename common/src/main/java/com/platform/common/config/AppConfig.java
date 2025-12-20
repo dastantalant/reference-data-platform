@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 public class AppConfig {
 
     @Bean
-    public ObjectMapper  objectMapper() {
+    public ObjectMapper objectMapper() {
         return new ObjectMapper();
     }
 }

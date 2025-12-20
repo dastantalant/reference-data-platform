@@ -1,4 +1,4 @@
-* Жизненный цикл и Согласование (Workflow)
-* SDK / Client Lib (Чтобы коллегам было удобно пользоваться)
-* Excel Import/Export (Чтобы наполнять данными не через Postman/Curl)
-* Search (Только если справочники реально огромные > 100к)
+* Lifecycle and Workflow
+* SDK / Client Lib (For ease of use for colleagues)
+* Excel Import/Export (For populating with data without using Postman/Curl)
+* Search (Only for really large reference books > 100k)

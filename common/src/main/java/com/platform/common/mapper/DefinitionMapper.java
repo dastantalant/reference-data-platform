@@ -1,13 +1,16 @@
 package com.platform.common.mapper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.platform.common.entity.Definition;
 import com.platform.common.entity.base.Translation;
 import com.platform.common.model.common.TranslationDto;
 import com.platform.common.model.definition.DefinitionResponse;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Component;
+
+import lombok.RequiredArgsConstructor;
 
 import java.util.Collections;
 import java.util.List;
@@ -56,7 +59,8 @@ public class DefinitionMapper {
     private Map<String, Object> parseJson(String json) {
         if (json == null || json.isEmpty()) return Collections.emptyMap();
         try {
-            return objectMapper.readValue(json, Map.class);
+            return objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {
+            });
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Error parsing JSON", e);
         }

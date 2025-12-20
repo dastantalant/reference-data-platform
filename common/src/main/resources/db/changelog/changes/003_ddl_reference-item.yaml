@@ -12,7 +12,6 @@ databaseChangeLog:
       id: 003_ddl_reference-item
       author: system
       changes:
-        # 1. Основная таблица ReferenceItem
         - createTable:
             tableName: reference_item
             columns:

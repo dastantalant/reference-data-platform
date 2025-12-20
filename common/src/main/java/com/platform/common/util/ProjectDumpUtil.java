@@ -47,7 +47,7 @@ public class ProjectDumpUtil {
                     .build()
                     .dump();
         } catch (IOException e) {
-            System.err.println("Ошибка при создании дампа: " + e.getMessage());
+            System.err.println("Error creating dump: " + e.getMessage());
         }
     }
 
@@ -61,8 +61,8 @@ public class ProjectDumpUtil {
         String targetPathStr = targetPackage.replace(".", "/");
         List<Path> foundFiles = new ArrayList<>();
 
-        System.out.println("🔍 Сканирование: " + projectRoot);
-        System.out.println("🎯 Пакет: " + targetPackage);
+        System.out.println("🔍 Scanning: " + projectRoot);
+        System.out.println("🎯 Package: " + targetPackage);
 
         Files.walkFileTree(projectRoot, new SimpleFileVisitor<>() {
             @Override
@@ -79,7 +79,6 @@ public class ProjectDumpUtil {
 
                 String relativePath = projectRoot.relativize(file).toString().replace("\\", "/");
 
-                // Проверка вхождения пакета в путь
                 if (relativePath.contains("/" + targetPathStr + "/") || relativePath.endsWith("/" + targetPathStr)) {
                     String ext = getExtension(file);
                     if (extensions.containsKey(ext)) {
@@ -93,15 +92,15 @@ public class ProjectDumpUtil {
         Collections.sort(foundFiles);
 
         if (foundFiles.isEmpty()) {
-            System.out.println("⚠️ Файлы не найдены.");
+            System.out.println("⚠️ Files not found");
             return 0;
         }
 
         try (BufferedWriter writer = Files.newBufferedWriter(outputPath, StandardCharsets.UTF_8)) {
-            writer.write("# Дамп пакета: " + targetPackage + "\n\n");
-            writer.write("- **Дата:** " + LocalDateTime.now() + "\n");
-            writer.write("- **Корень проекта:** `" + projectRoot.toAbsolutePath() + "`\n");
-            writer.write("- **Файлов:** " + foundFiles.size() + "\n\n");
+            writer.write("# Packet dump: " + targetPackage + "\n\n");
+            writer.write("- **Data:** " + LocalDateTime.now() + "\n");
+            writer.write("- **The root of the project:** `" + projectRoot.toAbsolutePath() + "`\n");
+            writer.write("- **Files:** " + foundFiles.size() + "\n\n");
             writer.write("---\n\n");
 
             for (Path file : foundFiles) {
@@ -109,8 +108,8 @@ public class ProjectDumpUtil {
             }
         }
 
-        System.out.println("✅ Дамп успешно сохранен в: " + outputPath.toAbsolutePath());
-        System.out.println("Файлов: " + foundFiles.size());
+        System.out.println("✅ The dump was successfully saved to: " + outputPath.toAbsolutePath());
+        System.out.println("Files: " + foundFiles.size());
         return foundFiles.size();
     }
 
@@ -132,7 +131,7 @@ public class ProjectDumpUtil {
                 }
             });
         } catch (UncheckedIOException | IOException e) {
-            writer.write("// Ошибка чтения файла: " + e.getMessage() + "\n");
+            writer.write("// Error reading file: " + e.getMessage() + "\n");
         }
 
         writer.write("```\n\n---\n\n");

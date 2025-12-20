@@ -37,27 +37,16 @@ public class LookupController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant date,
             WebRequest request) {
 
-        // 1. Получаем данные (Сервис берет их из Caffeine кэша памяти, это миллисекунды)
         DictionaryLookupResponse response = lookupService.getDictionary(code, lang, date);
 
-        // 2. Генерируем ETag на основе содержимого объекта.
-        // Lombok @Data генерирует hashCode на основе всех полей, это надежно для DTO.
-        // Преобразуем в Hex-строку для использования в HTTP заголовке.
         String etag = "\"" + Integer.toHexString(response.hashCode()) + "\"";
 
-        // 3. Проверка ETag средствами Spring
-        // Если клиент прислал заголовок If-None-Match, совпадающий с нашим etag,
-        // этот метод вернет true, и Spring сам отправит статус 304 (без тела).
         if (request.checkNotModified(etag)) {
-            return null; // Тело не нужно, Spring завершит обработку
+            return null;
         }
 
-        // 4. Если данные изменились (или это первый запрос), отдаем 200 OK + новый ETag
         return ResponseEntity.ok()
                 .eTag(etag)
-                // max-age=86400 (24 часа).
-                // Браузер будет держать кэш сутки. После суток он сделает запрос с ETag.
-                // Если данные не поменялись, сервер ответит 304, и браузер продлит кэш еще на сутки.
                 .cacheControl(CacheControl.maxAge(24, TimeUnit.HOURS))
                 .body(response);
     }

@@ -10,10 +10,12 @@ import com.platform.common.model.lookup.LookupBatchRequest;
 import com.platform.common.repository.DefinitionRepository;
 import com.platform.common.repository.ReferenceItemRepository;
 import com.platform.common.service.LookupService;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -31,7 +33,7 @@ public class LookupServiceImpl implements LookupService {
 
     private final ReferenceItemRepository itemRepository;
     private final DefinitionRepository definitionRepository;
-    private final ReferenceItemMapper mapper; // Используем маппер
+    private final ReferenceItemMapper mapper;
 
     @Override
     @Cacheable(value = "dictionaries", key = "#code + '-' + #lang + '-' + #date", unless = "#result == null")
@@ -67,20 +69,17 @@ public class LookupServiceImpl implements LookupService {
         List<DictionaryLookupResponse> response = new ArrayList<>();
         for (LookupBatchRequest.SingleRequest req : request.getRequests()) {
             try {
-                // Вызываем проксируемый метод для работы кэша
                 response.add(getDictionary(req.getCode(), null, null));
-            } catch (Exception e) {
-                // Log and continue
+            } catch (Exception _) {
             }
         }
         return response;
     }
 
-    // Локальный вспомогательный метод для i18n заголовка справочника
     private Map<String, String> mapTranslations(List<Translation> translations, String lang) {
         if (translations == null) return Collections.emptyMap();
         return translations.stream()
                 .filter(t -> lang == null || t.getLocale().equalsIgnoreCase(lang))
-                .collect(Collectors.toMap(Translation::getLocale, Translation::getValue, (a, b) -> a));
+                .collect(Collectors.toMap(Translation::getLocale, Translation::getValue, (a, _) -> a));
     }
 }

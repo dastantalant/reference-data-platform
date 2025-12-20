@@ -4,9 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.platform.common.model.definition.RelationRule;
+
+import org.springframework.stereotype.Component;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
@@ -24,7 +26,8 @@ public class JsonHelper {
             return Collections.emptyList();
         }
         try {
-            return objectMapper.readValue(json, new TypeReference<List<RelationRule>>() {});
+            return objectMapper.readValue(json, new TypeReference<List<RelationRule>>() {
+            });
         } catch (JsonProcessingException e) {
             log.error("Error parsing validation rules", e);
             throw new RuntimeException("Invalid validation rules format", e);
@@ -36,7 +39,8 @@ public class JsonHelper {
             return Collections.emptyMap();
         }
         try {
-            return objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {});
+            return objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {
+            });
         } catch (JsonProcessingException e) {
             log.error("Error parsing content", e);
             throw new RuntimeException("Invalid content format", e);
