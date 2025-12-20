@@ -1,0 +1,59 @@
+{
+  "clickHere": "Clique aqui",
+  "confirm": "Confirmar",
+  "emailAddress": "Endereço de email",
+  "emailVerification": "Verificação do email",
+  "forgotPassword": "Esqueceu a senha",
+  "privacityPolicy": "Política de privacidade",
+  "rememberMe": "Lembrar",
+  "passwordRecovery": "Recuperação da senha",
+  "passwordReset": "Alteração da senha",
+  "send": "Enviar",
+  "signIn": "Acessar",
+  "signInToContinue": "Acesse para continuar",
+  "signUp": "Crie sua conta",
+  "success": "Sucesso",
+  "termsAndConditions": "Termos e condições",
+  "verifyMyEmail": "Verificar meu email",
+  "welcome": "Seja bem vindo",
+  "welcomeApp": "Bem vindo rest whatsapp",
+  "attributes": {
+    "first_name": "Nome",
+    "last_name": "Sobrenome",
+    "password_confirmation": "Confirmação",
+    "password": "Senha",
+    "username": "E-mail"
+  },
+  "message": {
+    "policyInfo": "Eu declaro que aceito os {license} e {privacity}.",
+    "recoveryEmailSuccess": "E-mail de recuperação de senha enviado. Verifique seu email",
+    "resetPasswordSuccess": "Senha alterada com sucesso",
+    "verifyWelcome": "Estamos felizes por você ter escolhido nosso aplicativo.",
+    "verifyConfirmation": "Confirme o seu e-mail clicando no botão abaixo.",
+    "verifyNotReceived": "Você não recebeu o e-mail de registro de sua conta? {click} para reenviar o e-email.",
+    "verifyEmailSent": "E-mail de confirmação envidado. Verifique seu e-mail.",
+    "verifyEmailSuccess": "E-mail confirmado com sucesso"
+  },
+  "validation": {
+    "invalidCredentials": "Usuário ou senha inválida",
+    "invalidPasswordConfirmation": "Confirmação da senha não é válida",
+    "usernameAlreadyExists": "E-mail já foi utilizado",
+    "userNotVerified": "E-mail não confirmado",
+    "rules": {
+      "email": "Email inválido",
+      "invalidToken": "Requisição para alteração da senha é inválida",
+      "invalidUser": "Email não foi encontrado",
+      "isEmailUnique": "E-mail já foi utilizado",
+      "minLength": "{field} deve conter pelo menos {min} caracteres",
+      "notFound": "{field} não existe",
+      "required": "{field} não foi informado",
+      "unique": "{field} já foi utilizado",
+      "userNotFound": "E-mail não existe em nossa base de dados"
+    },
+    "passwords": {
+      "throttled": "Muitas tentativas. Tente realizar a operação mais tarde",
+      "token": "Requisição para alteração da senha é inválida",
+      "user": "E-mail não existe"
+    }
+  }
+}
